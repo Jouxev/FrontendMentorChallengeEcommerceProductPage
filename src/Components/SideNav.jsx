@@ -8,6 +8,7 @@ const Container = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  z-index: 9998 !important;
   margin: 0px -20px;
   background-color: rgba(0, 0, 0, 0.2);
   ${mobile({

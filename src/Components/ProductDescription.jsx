@@ -15,20 +15,33 @@ const Container = styled.div`
   position: relative;
   margin: 40px 0px;
   display: flex;
+  ${mobile({
+    flexDirection: "column",
+    margin: "0",
+  })}
 `;
 
 const Right = styled.div`
   margin: 40px 0px 40px 80px;
   flex: 1;
   justify-content: flex-end;
+  ${mobile({
+    margin: "0",
+  })}
 `;
-const MainImageContainer = styled.div``;
+const MainImageContainer = styled.div`
+  position: relative;
+`;
 const Image = styled.img`
   height: 320px;
   width: auto;
   border-radius: 10px;
   cursor: pointer;
   ${(props) => props.large && { height: "400px" }}
+  ${mobile({
+    width: "100%",
+    borderRadius: "0px",
+  })}
 `;
 const OtherImagesContainer = styled.div`
   display: flex;
@@ -53,6 +66,9 @@ const ImageThumbContainer = styled.div`
         opacity: "0.3",
       },
     }}
+  ${mobile({
+    display: "none",
+  })}
 `;
 const ImageThumb = styled.img`
   width: 100%;
@@ -63,6 +79,10 @@ const ImageThumb = styled.img`
 const Left = styled.div`
   flex: 1;
   margin: 40px 80px 40px 0px;
+
+  ${mobile({
+    margin: "0px 20px",
+  })}
 `;
 
 const TitleContainer = styled.div``;
@@ -71,9 +91,17 @@ const BrandName = styled.h3`
   font-weight: 700;
   text-transform: uppercase;
   color: var(--Orange);
+  ${mobile({
+    margin: "0px 0px 5px 0px",
+    fontSize: "12px",
+  })}
 `;
 const ProductTitle = styled.h1`
   font-size: 32px;
+  ${mobile({
+    margin: "0",
+    fontSize: "26px",
+  })}
 `;
 
 const ProductDesc = styled.p`
@@ -81,7 +109,13 @@ const ProductDesc = styled.p`
   font-size: 14px;
 `;
 
-const PriceContainer = styled.div``;
+const PriceContainer = styled.div`
+  ${mobile({
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center;",
+  })}
+`;
 const FinalPrice = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -110,6 +144,9 @@ const PreviewsPrice = styled.p`
 const ActionButtonContainer = styled.div`
   display: flex;
   margin: 40px 0px;
+  ${mobile({
+    flexDirection: "column",
+  })}
 `;
 const QuantityContainer = styled.div`
   flex: 1;
@@ -124,6 +161,11 @@ const QuantityContainer = styled.div`
   justify-content: space-between;
   margin-right: 10px;
   border-radius: 10px;
+  ${mobile({
+    padding: "15px 20px",
+    marginRight: "0px",
+    marginBottom: "10px",
+  })}
 `;
 const Min = styled.div`
   height: 100%;
@@ -176,10 +218,15 @@ const AddButton = styled.div`
   &:hover {
     opacity: 0.8;
   }
+  ${mobile({
+    height: "40px",
+    padding: "15px 20px",
+  })}
 `;
 
 const ImageGallery = styled.div`
   position: fixed;
+  z-index: 9999 !important;
   top: 0;
   left: 0;
   height: 100%;
@@ -190,6 +237,7 @@ const ImageGallery = styled.div`
   background-color: rgba(0, 0, 0, 0.8);
   ${mobile({
     display: "none",
+    zIndex: "-1",
   })};
 `;
 const MainContainer = styled.div`
@@ -226,13 +274,22 @@ const NavigationArrow = styled.div`
   background-color: white;
   border-radius: 50%;
   cursor: pointer;
+  z-index: 99 !important;
   transition: 0.2s ease all;
   &:hover {
     opacity: 0.8;
   }
+  ${(props) =>
+    mobile({
+      right: props.right ? "10px" : "auto",
+      left: props.right ? "auto" : "10px",
+      height: "40px",
+      width: "40px",
+      top: "120px",
+    })}
 `;
 
-export const ProductDescription = () => {
+export const ProductDescription = (props) => {
   const [selectedImageId, setselectedImageId] = useState(1);
   const [imageToPreview, setimageToPreview] = useState(ProductImage1);
   const [galleryOpened, setgalleryOpened] = useState(false);
@@ -283,11 +340,24 @@ export const ProductDescription = () => {
     <Container>
       <Right>
         <MainImageContainer>
+          <NavigationArrow
+            onClick={() => galleryNavigate("previous")}
+            className="MobileOnly"
+          >
+            <IconPrevious />
+          </NavigationArrow>
           <Image
             src={imageToPreview}
             alt="product Image"
             onClick={() => setgalleryOpened(!galleryOpened)}
           />
+          <NavigationArrow
+            right
+            onClick={() => galleryNavigate("next")}
+            className="MobileOnly"
+          >
+            <IconNext />
+          </NavigationArrow>
         </MainImageContainer>
         <OtherImagesContainer>
           <ImageThumbContainer
@@ -351,7 +421,11 @@ export const ProductDescription = () => {
             <Qty> {qtyToAdd} </Qty>
             <Add onClick={() => setQty("add")}> + </Add>
           </QuantityContainer>
-          <AddButton>
+          <AddButton
+            onClick={() => {
+              props.cartCount(qtyToAdd);
+            }}
+          >
             <CartIcon className="btnIcon" />
             add to cart
           </AddButton>

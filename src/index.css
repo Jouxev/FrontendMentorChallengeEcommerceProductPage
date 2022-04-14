@@ -39,9 +39,15 @@ p {
 .closeIconWhite > path {
   fill: hsl(0, 0%, 100%);
 }
+.MobileOnly {
+  visibility: hidden;
+}
 @media only screen and (max-width: 375px) {
   .HamburgerMenu {
     display: block;
     margin-right: 20px;
+  }
+  .MobileOnly {
+    visibility: visible;
   }
 }

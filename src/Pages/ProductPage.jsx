@@ -1,3 +1,4 @@
+import { useState } from "react";
 import stled from "styled-components";
 import { Navbar, ProductDescription } from "../Components";
 import { mobile } from "../responsive";
@@ -13,10 +14,19 @@ ${mobile({
 `;
 
 export const ProductPage = () => {
+  const [cartCount, setcartCount] = useState(0);
+  const resetCart = () => {
+    setcartCount(0);
+  };
+
   return (
     <Container>
-      <Navbar />
-      <ProductDescription />
+      <Navbar cartCount={cartCount} resetCart={() => resetCart()} />
+      <ProductDescription
+        cartCount={(qty) => {
+          setcartCount(cartCount + qty);
+        }}
+      />
     </Container>
   );
 };

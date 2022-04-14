@@ -21,6 +21,7 @@ const Container = styled.nav`
     width: "auto",
     margin: "0px 20px",
     border: "none",
+    height: "80px",
   })}
 `;
 const Right = styled.div`
@@ -66,6 +67,27 @@ const Left = styled.div`
   align-items: center;
   flex: 1;
 `;
+
+const CartIconContainer = styled.div`
+  position: relative;
+`;
+
+const CartCount = styled.span`
+  position: absolute;
+  top: -10px;
+  right: -20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 10px;
+  font-weight: 400;
+  color: white;
+  background-color: var(--Orange);
+  height: 15px;
+  width: 25px;
+  border-radius: 10px;
+`;
+
 const Avatar = styled.img`
   margin-left: 40px;
   witdh: 48px;
@@ -82,7 +104,7 @@ const Avatar = styled.img`
   })}
 `;
 
-export const Navbar = () => {
+export const Navbar = (props) => {
   const [menuOpened, setmenuOpened] = useState(false);
   const [cartOpened, setcartOpened] = useState(false);
   const [sideNavOpened, setsideNavOpened] = useState(false);
@@ -111,13 +133,19 @@ export const Navbar = () => {
         </Links>
       </Right>
       <Left>
-        <CartIcon
-          className="cartIcon"
-          onClick={() => setcartOpened(!cartOpened)}
-        />
+        <CartIconContainer>
+          {props.cartCount > 0 && <CartCount> {props.cartCount}</CartCount>}
+          <CartIcon
+            className="cartIcon"
+            onClick={() => setcartOpened(!cartOpened)}
+          ></CartIcon>
+        </CartIconContainer>
+
         <Avatar src={ProfilePic} alt="Profile picture" />
       </Left>
-      {cartOpened && <Cart />}
+      {cartOpened && (
+        <Cart cartCount={props.cartCount} resetCart={() => props.resetCart()} />
+      )}
       {menuOpened && <SideNav />}
     </Container>
   );
